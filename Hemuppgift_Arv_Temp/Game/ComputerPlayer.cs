@@ -8,8 +8,10 @@
         // Den datorbaserade spelaren väljer hur många pinnar de vill ta bort
         public override int TakePins(Board board)
         {
-            // Tillfällig kod för testning
-            int removedPins = 1;
+            int removedPins = 0;
+
+            Random rnd = new Random();
+            removedPins = rnd.Next(1, 2);
 
             board.TakePins(removedPins);
 
