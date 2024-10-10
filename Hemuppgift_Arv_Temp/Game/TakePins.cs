@@ -23,18 +23,39 @@
 
         static void Main(string[] args)
         {
-            int noPins = 0;
+            // Skapar objekt som behövs
             Board board = new Board();
+            Player human = new HumanPlayer("Human");
+            Player cpu = new ComputerPlayer("CPU");
 
-            // Testar SetUp och GetNoPins
-            board.SetUp(10); // Ställer in spelet att ha 10 pinnar
-            noPins = board.GetNoPins(); // Kollar antal pinnar i spelet
-            Console.WriteLine($"Antal pinnar i spelet är {noPins}!");
+            // Deklarerar variabler för att öka läsbarheten i utskrifter
+            int removedPins = 0;
+            int remainingPins = 0;
+            string humanName = human.GetUserID();
+            string cpuName = cpu.GetUserID();
 
-            // Testar TakePins och GetNoPins
-            board.TakePins(2); // Tar bort 2 pinnar från det totala antalet
-            noPins = board.GetNoPins(); // Kollar antal pinnar i spelet
-            Console.WriteLine($"Antal pinnar som återstår är {noPins}!");
+            // Tillfälligt val av antal pinnar i spelet
+            board.SetUp(10);
+
+            // Tillfällig loop för testning
+            while (true)
+            {
+                // Människa väljer pinnar att ta bort
+                removedPins = human.TakePins(board);
+                remainingPins = board.GetNoPins();
+
+                Console.WriteLine($"\n{humanName} har tagit bort {removedPins} pinnar!");
+                Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar..");
+
+                // CPU väljer pinnar att ta bort
+                removedPins = cpu.TakePins(board);
+                remainingPins = board.GetNoPins();
+
+                Console.WriteLine($"\n{cpuName} har tagit bort {removedPins} pinnar!");
+                Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar..");
+
+                Console.ReadKey();
+            }
         }
     }
 }

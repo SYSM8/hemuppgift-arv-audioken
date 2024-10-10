@@ -5,19 +5,19 @@
         // Egenskap som håller koll på antalet pinnar i spelet
         public int NoPins { get; set; }
 
-        // Metod som ställer in antalet pinnar vid spelets start
+        // Anger startvärdet för "NoPins"
         public void SetUp(int initialPins)
         {
-            NoPins = initialPins; // Lagrar det skickade värdet i egenskapen NoPins
+            NoPins = initialPins;
         }
 
-        // Metod som tar bort pinnar från det totala antalet
+        // Subtraherar parametervärdet från "NoPins"
         public void TakePins(int takePins)
         {
-            NoPins -= takePins; // Subtraherar det skickade värdet för egenskapen NoPins
+            NoPins -= takePins;
         }
 
-        // Metod som returnerar antalet pinnar som finns kvar i spelet
+        // Returnerar värdet från "NoPins"
         public int GetNoPins()
         {
             return NoPins;
