@@ -34,28 +34,57 @@
             string humanName = human.GetUserID();
             string cpuName = cpu.GetUserID();
 
+            // Vinstkontroll när någon vunnit
+            bool didUserWin = false;
+
             // Tillfälligt val av antal pinnar i spelet
             board.SetUp(10);
+            remainingPins = 10;
 
-            // Tillfällig loop för testning
-            while (true)
+            while (remainingPins != 0)
             {
-                // Människa väljer pinnar att ta bort
+                // HumanPlayer spelar..
                 removedPins = human.TakePins(board);
                 remainingPins = board.GetNoPins();
 
                 Console.WriteLine($"\n{humanName} har tagit bort {removedPins} pinnar!");
-                Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar..");
 
-                // CPU väljer pinnar att ta bort
+                if (remainingPins == 0)
+                {
+                    didUserWin = true;
+                    break;
+                }
+                else { Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar.."); }
+
+                // ComputerPlayer spelar..
                 removedPins = cpu.TakePins(board);
                 remainingPins = board.GetNoPins();
 
                 Console.WriteLine($"\n{cpuName} har tagit bort {removedPins} pinnar!");
-                Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar..");
 
-                Console.ReadKey();
+                if (remainingPins == 0)
+                {
+                    didUserWin = false;
+                    break;
+                }
+                else { Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar.."); }
             }
+
+            // Resultat för vem som vann
+            if (didUserWin)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nGrattis {humanName}! Du vann över {cpuName}. Bra jobbat!");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\nOuch! Ledsen {humanName}, men denna gång vann {cpuName}..");
+                Console.ResetColor();
+            }
+
+            Console.ReadKey();
         }
     }
 }

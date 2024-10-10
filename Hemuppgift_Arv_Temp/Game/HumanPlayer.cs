@@ -9,6 +9,7 @@
         public override int TakePins(Board board)
         {
             int removedPins = 0; // Lagrar det antal pinnar användaren vill ta bort
+            int remainingPins = board.GetNoPins(); // Hämtar antalet återstående pinnar
             bool correctInput = false; // Kontroll för giltig inmatning
 
             do
@@ -22,12 +23,23 @@
                         removedPins = 1;
                         correctInput = true;
                         break;
+
                     case "2":
-                        removedPins = 2;
-                        correctInput = true;
+                        if (remainingPins > 1)
+                        {
+                            removedPins = 2;
+                            correctInput = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nDet finns endast en pinne kvar..");
+                        }
                         break;
+
                     default:
-                        Console.WriteLine("Du måste välja 1 eller 2..");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nDu måste välja 1 eller 2..");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -36,7 +48,7 @@
             // Anropar metod i klassen Board för att subtrahera det valda antalet
             board.TakePins(removedPins);
 
-            // Returnera det borttagna antalet till main
+            // Returnera borttaget antal till main
             return removedPins;
         }
     }
