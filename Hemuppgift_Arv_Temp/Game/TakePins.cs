@@ -26,7 +26,8 @@
             // Skapar objekt som behövs
             Board board = new Board();
             Player human = new HumanPlayer("Human");
-            Player cpu = new ComputerPlayer("CPU");
+            //Player cpu = new ComputerPlayer("CPU");
+            Player cpu = new ComputerPlayerHard("AI GOD");
 
             // Deklarerar variabler för att öka läsbarheten i utskrifter
             int removedPins = 0;

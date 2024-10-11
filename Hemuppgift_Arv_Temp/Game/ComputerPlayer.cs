@@ -14,9 +14,12 @@
             // Skapar ett nytt objekt för att slumpa nummer
             Random rnd = new Random();
 
-            // Slumpar mellan 1-2 sålänge minst 2 pinnar finns kvar
-            if (remainingPins > 1)
+            // Slumpar mellan 1-2 sålänge minst 3 pinnar finns kvar
+            if (remainingPins > 2)
                 removedPins = rnd.Next(1, 3); // Slumpar mellan 1-2
+
+            else if (remainingPins == 2)
+                removedPins = 2; // Ta bort två pinnar om det bara finns två kvar
 
             else
                 removedPins = 1; // Ta bort en pinne om det bara finns en kvar
