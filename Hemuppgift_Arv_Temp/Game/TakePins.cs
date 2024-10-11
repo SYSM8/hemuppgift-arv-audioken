@@ -25,22 +25,94 @@
         {
             // Skapar objekt som behövs
             Board board = new Board();
-            Player human = new HumanPlayer("Human");
-            //Player cpu = new ComputerPlayer("CPU");
-            Player cpu = new ComputerPlayerHard("AI GOD");
+
+
 
             // Deklarerar variabler för att öka läsbarheten i utskrifter
             int removedPins = 0;
             int remainingPins = 0;
-            string humanName = human.GetUserID();
-            string cpuName = cpu.GetUserID();
 
             // Vinstkontroll när någon vunnit
             bool didUserWin = false;
 
-            // Tillfälligt val av antal pinnar i spelet
-            board.SetUp(10);
-            remainingPins = 10;
+            // Välkomnar användaren med instruktioner
+            Console.WriteLine("Välkommen till Pinn or Loose!");
+
+            Console.WriteLine("\nSpelet går ut på att det ligger ett antal stickor på ett bord. " +
+                              "\nTvå spelare turas om att ta stickor. Man får ta en eller två stickor. " +
+                              "\nDen som tar sista stickan vinner.");
+
+            Console.Write("\nVad heter du?: ");
+
+            // Skapar ett objekt för HumanPlayer och lagrar användarens inmatade namn
+            Player human = new HumanPlayer(Console.ReadLine());
+
+            // Lagrar namnet i ny variabel för tydligare utskrifter
+            string humanName = human.GetUserID();
+
+            Console.WriteLine($"\nTack {humanName}!");
+
+            // Skapar objekt för datormotståndare som är satt till null i väntan på menyval av svårighetsgrad
+            Player cpu = null;
+
+            bool correctInput = false; // Kontroll för giltig inmatning
+
+            do
+            {
+                Console.WriteLine("\nVälj motståndarens svårighetsgrad.");
+
+                Console.WriteLine("\n[1] 3-CPO (Lätt) | [2] Deep Thought (Svår)");
+
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        cpu = new ComputerPlayer("3-CPO");
+                        correctInput = true;
+                        break;
+
+                    case "2":
+                        cpu = new ComputerPlayerHard("Deep Thought");
+                        correctInput = true;
+                        break;
+
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nDu måste välja 1 eller 2..");
+                        Console.ResetColor();
+                        break;
+                }
+            } while (!correctInput);
+
+            // Lagrar namnet i ny variabel för tydligare utskrifter
+            string cpuName = cpu.GetUserID();
+
+            Console.WriteLine($"\nTack {humanName}! Du har valt att möta {cpuName}\nHur många pinnar vill du att spelet ska ha?");
+
+            correctInput = false;
+
+            do
+            {
+                Console.Write("\nVälj mellan 10-30: ");
+
+                if (int.TryParse(Console.ReadLine(), out remainingPins) && remainingPins >= 10 && remainingPins <= 30)
+                {
+                    board.SetUp(remainingPins);
+                    correctInput = true;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nDu måste välja ett antal mellan 10-30..");
+                    Console.ResetColor();
+                }
+            } while (!correctInput);
+
+            Console.WriteLine($"\nTack {humanName}! Antal pinnar i spelet är {remainingPins} st");
+            Console.WriteLine($"Matchen mellan {humanName} och {cpuName} kan börja!");
+
+            Console.WriteLine($"\nDet finns totalt {remainingPins} pinnar i spelet");
+
+            Console.WriteLine("\nDu börjar..");
 
             while (remainingPins != 0)
             {
@@ -48,7 +120,9 @@
                 removedPins = human.TakePins(board);
                 remainingPins = board.GetNoPins();
 
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"\n{humanName} har tagit bort {removedPins} pinnar!");
+                Console.ResetColor();
 
                 if (remainingPins == 0)
                 {
@@ -61,7 +135,9 @@
                 removedPins = cpu.TakePins(board);
                 remainingPins = board.GetNoPins();
 
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"\n{cpuName} har tagit bort {removedPins} pinnar!");
+                Console.ResetColor();
 
                 if (remainingPins == 0)
                 {
