@@ -14,8 +14,7 @@
 
             do
             {
-                Console.WriteLine("\nVill du ta bort [1] eller [2] pinnar?");
-                Console.Write("Ditt val: ");
+                Console.Write("\nTa bort [1] eller [2] pinnar? ");
 
                 switch (Console.ReadLine())
                 {
@@ -32,7 +31,9 @@
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\nDet finns endast en pinne kvar..");
+                            Console.ResetColor();
                         }
                         break;
 

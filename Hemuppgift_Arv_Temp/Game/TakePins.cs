@@ -23,57 +23,148 @@
 
         static void Main(string[] args)
         {
-            // Skapar objekt som behövs
+            // START
+            WelcomeScreen();
+
+            // Spelinställningar
+            Player user = new HumanPlayer(ChooseUserName()); // Skapar "Player" med en instans från "HumanPlayer"
+                                                             // Parametern returnerar ett valt användarnamn
+
+            string userName = user.GetUserID(); // Lagrar namnet i variabel för tydligare utskrifter
+
+            Player cpu = ChooseOpponent(userName); // Skapar "Player" baserat på vald motståndare
+                                                   // Använder "userName" för utskrift i metoden
+
+            string cpuName = cpu.GetUserID(); // Lagrar namnet i ny variabel för tydligare utskrifter
+
+            int numberOfPins = ChooseNumberOfPins(cpuName); // Lagrar valt antal pinnar, använder "cpuName" för utskrift i metoden
+
+            // Skapar spelplan
             Board board = new Board();
 
+            // Ställer in antalet pinnar för spelplanen
+            board.SetUp(numberOfPins);
 
-
-            // Deklarerar variabler för att öka läsbarheten i utskrifter
+            // Spelmekanik
             int removedPins = 0;
-            int remainingPins = 0;
 
-            // Vinstkontroll när någon vunnit
+            bool userTurn = true;
             bool didUserWin = false;
 
+            Console.Clear();
+
+            Console.WriteLine("=============================================");
+            Console.WriteLine("              SPELET ÄR IGÅNG..              ");
+            Console.WriteLine("=============================================");
+
+            while (numberOfPins != 0)
+            {
+                VisualizePins(numberOfPins);
+
+                if (userTurn)
+                {
+                    // Användarens tur
+                    removedPins = user.TakePins(board); // Lagra antalet borttagna pinnar
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n[{userName}] har tagit bort {removedPins} pinnar!");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    // Simulerar betänktetid för vald datormotståndare
+                    ProcessingSimulator(cpuName);
+
+                    // Datorns tur
+                    removedPins = cpu.TakePins(board);
+
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"\n\n[{cpuName}] har tagit bort {removedPins} pinnar!");
+                    Console.ResetColor();
+                }
+
+                numberOfPins = board.GetNoPins(); // Lagra antalet återstående pinnar
+
+                // Vinstkontroll
+                if (numberOfPins == 0)
+                {
+                    if (userTurn)
+                        didUserWin = true;
+                    else
+                        didUserWin = false;
+                    break;
+                }
+
+                userTurn = !userTurn;
+
+                Console.WriteLine("\n=============================================");
+            }
+
+            // Slutresultat
+            EndResult(didUserWin, userName, cpuName);
+        }
+
+        static void WelcomeScreen()
+        {
+            Console.Clear();
+
             // Välkomnar användaren med instruktioner
-            Console.WriteLine("Välkommen till Pinn or Loose!");
+            Console.WriteLine("=============================================");
+            Console.WriteLine("======= VÄLKOMMEN TILL PINN OR LOOSE! =======");
+            Console.WriteLine("=============================================");
+            Console.WriteLine();
+            Console.WriteLine("* Det ligger ett antal stickor på ett bord. ");
+            Console.WriteLine("* Två spelare turas om att ta stickor.");
+            Console.WriteLine("* Man får ta en eller två stickor.");
+            Console.WriteLine("* Den som tar sista stickan vinner.");
+            Console.WriteLine();
+            Console.WriteLine("=============================================");
 
-            Console.WriteLine("\nSpelet går ut på att det ligger ett antal stickor på ett bord. " +
-                              "\nTvå spelare turas om att ta stickor. Man får ta en eller två stickor. " +
-                              "\nDen som tar sista stickan vinner.");
+            Console.Write("\nTryck på valfri tangent för att fortsätta..");
+            Console.ReadKey();
+        }
 
-            Console.Write("\nVad heter du?: ");
+        static string ChooseUserName()
+        {
+            Console.Clear();
 
-            // Skapar ett objekt för HumanPlayer och lagrar användarens inmatade namn
-            Player human = new HumanPlayer(Console.ReadLine());
+            Console.WriteLine("=============================================");
+            Console.WriteLine("                ANVÄNDARNAMN                 ");
+            Console.WriteLine("=============================================");
+            Console.Write("\nVälj ditt användarnamn: ");
 
-            // Lagrar namnet i ny variabel för tydligare utskrifter
-            string humanName = human.GetUserID();
+            string userName = Console.ReadLine();
 
-            Console.WriteLine($"\nTack {humanName}!");
+            return userName;
+        }
 
-            // Skapar objekt för datormotståndare som är satt till null i väntan på menyval av svårighetsgrad
-            Player cpu = null;
+        static Player ChooseOpponent(string humanName)
+        {
+            Console.Clear();
 
-            bool correctInput = false; // Kontroll för giltig inmatning
+            Console.WriteLine("=============================================");
+            Console.WriteLine("                 MOTSTÅNDARE                 ");
+            Console.WriteLine("=============================================");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nDu har valt användarnamnet [{humanName}].");
+            Console.ResetColor();
 
             do
             {
-                Console.WriteLine("\nVälj motståndarens svårighetsgrad.");
+                Console.WriteLine("\nVälj din motståndare:");
 
-                Console.WriteLine("\n[1] 3-CPO (Lätt) | [2] Deep Thought (Svår)");
+                Console.WriteLine("\n[1] 3-CPO (Lätt)\n[2] Deep Thought (Svår)");
+
+                Console.Write("\nDitt val: ");
 
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        cpu = new ComputerPlayer("3-CPO");
-                        correctInput = true;
-                        break;
+                        return new ComputerPlayer("3-CPO");
 
                     case "2":
-                        cpu = new ComputerPlayerHard("Deep Thought");
-                        correctInput = true;
-                        break;
+                        return new ComputerPlayerHard("Deep Thought");
 
                     default:
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -81,87 +172,80 @@
                         Console.ResetColor();
                         break;
                 }
-            } while (!correctInput);
+            } while (true);
+        }
 
-            // Lagrar namnet i ny variabel för tydligare utskrifter
-            string cpuName = cpu.GetUserID();
+        static int ChooseNumberOfPins(string cpuName)
+        {
+            Console.Clear();
 
-            Console.WriteLine($"\nTack {humanName}! Du har valt att möta {cpuName}\nHur många pinnar vill du att spelet ska ha?");
+            Console.WriteLine("=============================================");
+            Console.WriteLine("                ANTAL PINNAR                 ");
+            Console.WriteLine("=============================================");
 
-            correctInput = false;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nDu har valt att möta [{cpuName}]");
+            Console.ResetColor();
+            Console.WriteLine("\nHur många pinnar vill du att spelet ska ha?");
 
             do
             {
-                Console.Write("\nVälj mellan 10-30: ");
+                Console.Write("\nVälj mellan 5-20: ");
 
-                if (int.TryParse(Console.ReadLine(), out remainingPins) && remainingPins >= 10 && remainingPins <= 30)
+                if (int.TryParse(Console.ReadLine(), out int numberOfPins) && numberOfPins >= 5 && numberOfPins <= 20)
                 {
-                    board.SetUp(remainingPins);
-                    correctInput = true;
+                    return numberOfPins;
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nDu måste välja ett antal mellan 10-30..");
+                    Console.WriteLine("\nDu måste välja ett antal mellan 5-20..");
                     Console.ResetColor();
                 }
-            } while (!correctInput);
+            } while (true);
+        }
 
-            Console.WriteLine($"\nTack {humanName}! Antal pinnar i spelet är {remainingPins} st");
-            Console.WriteLine($"Matchen mellan {humanName} och {cpuName} kan börja!");
+        static void ProcessingSimulator(string cpuName)
+        {
+            // Datorns tur
+            Console.Write($"\n[{cpuName}] processerar");
 
-            Console.WriteLine($"\nDet finns totalt {remainingPins} pinnar i spelet");
-
-            Console.WriteLine("\nDu börjar..");
-
-            while (remainingPins != 0)
+            // Simulerar datorns betänketid
+            for (int i = 0; i < 6; i++)
             {
-                // HumanPlayer spelar..
-                removedPins = human.TakePins(board);
-                remainingPins = board.GetNoPins();
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\n{humanName} har tagit bort {removedPins} pinnar!");
-                Console.ResetColor();
-
-                if (remainingPins == 0)
-                {
-                    didUserWin = true;
-                    break;
-                }
-                else { Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar.."); }
-
-                // ComputerPlayer spelar..
-                removedPins = cpu.TakePins(board);
-                remainingPins = board.GetNoPins();
-
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"\n{cpuName} har tagit bort {removedPins} pinnar!");
-                Console.ResetColor();
-
-                if (remainingPins == 0)
-                {
-                    didUserWin = false;
-                    break;
-                }
-                else { Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar.."); }
+                Console.Write(".");
+                Thread.Sleep(400);
             }
+        }
 
-            // Resultat för vem som vann
+        static void EndResult(bool didUserWin, string userName, string cpuName)
+        {
             if (didUserWin)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nGrattis {humanName}! Du vann över {cpuName}. Bra jobbat!");
+                Console.WriteLine($"\nGrattis [{userName}]! Du vann över [{cpuName}]. Bra jobbat!");
                 Console.ResetColor();
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\nOuch! Ledsen {humanName}, men denna gång vann {cpuName}..");
+                Console.WriteLine($"\nOuch! Ledsen [{userName}], men denna gång vann [{cpuName}]..");
                 Console.ResetColor();
             }
+        }
 
-            Console.ReadKey();
+        static void VisualizePins(int remainingPins)
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"\nDet finns {remainingPins} pinnar kvar..\n");
+
+            for (int i = 0; i < remainingPins; i++)
+            {
+                Console.Write(" |");
+            }
+
+            Console.ResetColor();
+            Console.WriteLine();
         }
     }
 }
