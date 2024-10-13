@@ -23,7 +23,7 @@
 
         static void Main(string[] args)
         {
-            bool playAgain = true;
+            bool playAgain = true; // Kontroll för att loopa om spelet
 
             while (playAgain)
             {
@@ -107,7 +107,8 @@
                 // Utskrift av slutresultat
                 EndResult(didHumanWin, humanName, cpuName);
 
-                playAgain = PlayAgain();
+                // Frågar om användaren vill spela igen
+                playAgain = PlayAgain(); // Lagrar svaret i en bool som kontrollerar hela spelets loop
             }
         }
 
@@ -309,6 +310,7 @@
             }
         }
 
+        // Låter användaren spela igen eller avsluta
         static bool PlayAgain()
         {
             // Välj nivån på den datorstyrda motståndaren
