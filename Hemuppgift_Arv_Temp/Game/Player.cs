@@ -1,22 +1,24 @@
 ﻿namespace Hemuppgift_Arv_Temp.Game
 {
+    // Superklass för att spelare
     public abstract class Player
     {
-        // Egenskap som hanterar spelarnas namn
+        // Spelarnas namn
         public string UserID { get; set; }
 
-        // Konstruktor som sätter namnet på "UserID" när spelarna skapas
+        // Initierar spelarna med namn
         public Player(string UserID)
         {
             this.UserID = UserID;
         }
 
-        // Returnerar spelarens namn
+        // Returnerar spelarnas namn
         public string GetUserID()
         {
             return UserID;
         }
 
+        // Implementeras av subklasser för att ta bort pinnar
         public abstract int TakePins(Board board);
     }
 }

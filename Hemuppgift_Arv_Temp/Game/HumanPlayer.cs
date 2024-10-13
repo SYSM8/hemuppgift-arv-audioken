@@ -1,55 +1,64 @@
 ﻿namespace Hemuppgift_Arv_Temp.Game
 {
+    // Underklass för människostyrd spelare
     public class HumanPlayer : Player
     {
-        // Konstruktor som ärver sin parameter för spelarnamn från superklassen Player
+        // Ärver spelarnamnet från "Player"
         public HumanPlayer(string userID) : base(userID) { }
 
-        // Den mänskliga spelaren väljer hur många pinnar de vill ta bort
+        // Användaren väljer antal pinnar att ta bort
         public override int TakePins(Board board)
         {
-            int removedPins = 0; // Lagrar det antal pinnar användaren vill ta bort
-            int remainingPins = board.GetNoPins(); // Hämtar antalet återstående pinnar
+            int removedPins = 0; // Lagrar borttagna pinnar
+            int remainingPins = board.GetNoPins(); // Lagrar återstående pinnar
+
             bool correctInput = false; // Kontroll för giltig inmatning
 
+            // Användarval som itererar tills giltig inmatning sker
             do
             {
-                Console.Write("\nTa bort [1] eller [2] pinnar? ");
+                Console.Write("Ta bort 1 eller 2 pinnar? ");
 
+                // Läser in inmatning
                 switch (Console.ReadLine())
                 {
+                    // Ta bort en pinne
                     case "1":
                         removedPins = 1;
-                        correctInput = true;
+                        correctInput = true; // Avbryt menyloop
                         break;
 
+                    // Ta bort två pinnar
                     case "2":
+
+                        // Ta endast bort två pinnar om det går
                         if (remainingPins > 1)
                         {
                             removedPins = 2;
-                            correctInput = true;
+                            correctInput = true; // Avbryt menyloop
                         }
                         else
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("\nDet finns endast en pinne kvar..");
+                            Console.WriteLine("\nDet finns endast en pinne kvar..\n");
                             Console.ResetColor();
                         }
                         break;
 
+                    // Varningsmeddelande vid felaktigt menyval. Iterera igen.
                     default:
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nDu måste välja 1 eller 2..");
+                        Console.WriteLine("\nDu måste välja 1 eller 2..\n");
                         Console.ResetColor();
                         break;
                 }
 
             } while (!correctInput);
 
-            // Anropar metod i klassen Board för att subtrahera det valda antalet
+            // Subtraherar pinnar från spelbrädet
             board.TakePins(removedPins);
 
-            // Returnera borttaget antal till main
+            // Returnera borttaget antal
             return removedPins;
         }
     }

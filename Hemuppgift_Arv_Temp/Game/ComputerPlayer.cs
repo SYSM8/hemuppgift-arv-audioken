@@ -1,33 +1,35 @@
 ﻿namespace Hemuppgift_Arv_Temp.Game
 {
+    // Underklass för datorstyrd spelare
     public class ComputerPlayer : Player
     {
-        // Konstruktor som ärver sin parameter för spelarnamn från superklassen Player
+        // Ärver spelarnamnet från "Player"
         public ComputerPlayer(string userID) : base(userID) { }
 
-        // Den datorbaserade spelaren väljer hur många pinnar de vill ta bort
+        // Enkel algoritm för att ta bort pinnar
         public override int TakePins(Board board)
         {
-            int removedPins = 0; // Lagrar det antal pinnar ComputerPlayer tar bort
-            int remainingPins = board.GetNoPins(); // Hämtar antalet återstående pinnar
+            int removedPins = 0; // Lagrar borttagna pinnar
+            int remainingPins = board.GetNoPins(); // Lagrar återstående pinnar
 
-            // Skapar ett nytt objekt för att slumpa nummer
-            Random rnd = new Random();
+            Random rnd = new Random(); // Objekt för randomisering
 
-            // Slumpar mellan 1-2 sålänge minst 3 pinnar finns kvar
+            // Finns fler än två - Slumpa 1-2
             if (remainingPins > 2)
-                removedPins = rnd.Next(1, 3); // Slumpar mellan 1-2
+                removedPins = rnd.Next(1, 3);
 
+            // Finns två - Ta bort 2
             else if (remainingPins == 2)
-                removedPins = 2; // Ta bort två pinnar om det bara finns två kvar
+                removedPins = 2;
 
+            // Finns en - Ta bort 1
             else
-                removedPins = 1; // Ta bort en pinne om det bara finns en kvar
+                removedPins = 1;
 
-            // Anropar metod i klassen Board för att subtrahera det valda antalet
+            // Subtraherar pinnar från spelbrädet
             board.TakePins(removedPins);
 
-            return removedPins; // Returnera borttaget antal till main
+            return removedPins; // Returnera borttaget antal
         }
     }
 }

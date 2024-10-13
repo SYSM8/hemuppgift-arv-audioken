@@ -1,23 +1,24 @@
 ﻿namespace Hemuppgift_Arv_Temp.Game
 {
+    // Spelbrädet
     public class Board
     {
-        // Egenskap som håller koll på antalet pinnar i spelet
+        // Antal pinnar
         public int NoPins { get; set; }
 
-        // Anger startvärdet för "NoPins"
+        // Initierar antalet pinnar
         public void SetUp(int initialPins)
         {
             NoPins = initialPins;
         }
 
-        // Subtraherar parametervärdet från "NoPins"
+        // Subtraherar borttagna pinnar
         public void TakePins(int takePins)
         {
             NoPins -= takePins;
         }
 
-        // Returnerar värdet från "NoPins"
+        // Returnerar antal pinnar
         public int GetNoPins()
         {
             return NoPins;
