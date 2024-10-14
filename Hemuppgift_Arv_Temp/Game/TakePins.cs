@@ -2,23 +2,42 @@
 {
     internal class TakePins
     {
-        // SVAR PÅ FRÅGOR:
-        /* 
-         a) Klassen Player är ( en superklass ) till klasserna HumanPlayer och ComputerPlayer.
+        /* SVAR PÅ FRÅGOR        
+        ----------------------------------------------------------------------------------------------------------
 
-         b) Vilka av följande tilldelningssatser är korrekta? 
+         F2 a) Klassen Player är .............. till klasserna HumanPlayer och ComputerPlayer.
+            
+            Superklass, basklass
+
+        ----------------------------------------------------------------------------------------------------------
+
+         F2 b) Vilka av följande tilldelningssatser är korrekta? 
          
-         Player p = new Player("Aegon");
-         FEL (klassen "Player" är Abstract)
+            Player p = new Player("Aegon");                    FEL     ("Player" är abstract)         
+            Player p = new HumanPlayer("Alicent");             RÄTT    ("HumanPlayer" äver från "Player")
+            HumanPlayer p = new HumanPlayer("Rhaenyra");       RÄTT    ("HumanPlayer" är inte abstrakt");
+            HumanPlayer p = new ComputerPlayer("Aemond");      FEL     (Inga arv, separata klasser).
 
-         Player p = new HumanPlayer("Alicent");
-         RÄTT (klassen "HumanPlayer", som ärver från klassen "Player", används istället)
+        ----------------------------------------------------------------------------------------------------------
 
-         HumanPlayer p = new HumanPlayer("Rhaenyra");
-         RÄTT (Klassen "HumanPlayer" är inte abstrakt och kan därmed få sina objekt instansierade");
+         D4 a) I programmet för spelet dra stickor använder vi arv (superklassen Player och underklasserna 
+               HumanPlayer och ComputerPlayer). Vad har vi vunnit med detta?
 
-         HumanPlayer p = new ComputerPlayer("Aemond");
-         FEL (Ingen av klasserna ärver från varandra och därför kan vi inte skapa objekt på det sättet).
+            Att kunna återanvända kod samt få möjligheten att skapa flera underklasser som bygger vidare på
+            superklassen "Player".
+
+        ----------------------------------------------------------------------------------------------------------
+
+         D4 b) Det finns en abstrakt metod i superklassen Player. Vad är en abstrakt metod? Varför finns den där?
+
+            En abstrakt metod saknar kod. Koden blir istället implementerad i de ärvande underklasserna.          
+            
+            Den finns där eftersom spelets funktionalitet är beroende av metoden som tar bort pinnar.     
+            Genom att göra metoden abstrakt i basklassen "Player", tvingas de ärvande klasserna att 
+            implementera den logik som krävs. Underklasser som "HumanPlayer" och "ComputerPlayer" har 
+            därmed ett kontrakt med basklassen.
+
+        ----------------------------------------------------------------------------------------------------------     
         */
 
         static void Main(string[] args)
@@ -44,7 +63,7 @@
                 int numberOfPins = ChooseNumberOfPins(); // Väljer antal pinnar för spelplan    
                 board.SetUp(numberOfPins); // Ställer in antalet pinnar för spelplanen
 
-                // Rensar konsollrutan
+                // Rensar konsolrutan
                 Console.Clear();
 
                 // Spelet startar

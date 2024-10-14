@@ -14,7 +14,6 @@
 
             bool correctInput = false; // Kontroll för giltig inmatning
 
-            // Användarval som itererar tills giltig inmatning sker
             do
             {
                 Console.Write("Ta bort 1 eller 2 pinnar? ");
@@ -53,7 +52,7 @@
                         break;
                 }
 
-            } while (!correctInput);
+            } while (!correctInput); // Loopar tills giltig inmatning sker
 
             // Subtraherar pinnar från spelbrädet
             board.TakePins(removedPins);

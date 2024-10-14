@@ -18,11 +18,9 @@
             if (remainingPins > 2)
                 removedPins = rnd.Next(1, 3);
 
-            // Finns två - Ta bort 2
+            // Annars ta bort de som återstår
             else if (remainingPins == 2)
                 removedPins = 2;
-
-            // Finns en - Ta bort 1
             else
                 removedPins = 1;
 
